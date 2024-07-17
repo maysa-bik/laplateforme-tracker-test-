@@ -15,6 +15,26 @@ public class Student {
         this.grade = grade;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public float getGrade() {
+        return grade;
+    }
+
     // Getters and Setters
 
     @Override

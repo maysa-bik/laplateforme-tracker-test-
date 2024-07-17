@@ -1,11 +1,14 @@
 package org.example;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 public class StudentService {
     private DatabaseManager dbManager;
 
     public StudentService(DatabaseManager dbManager) {
+
         this.dbManager = dbManager;
     }
 
@@ -40,6 +43,8 @@ public class StudentService {
         }
     }
 
+
+
     public List<Student> getAllStudents() throws SQLException {
         String query = "SELECT * FROM student";
         List<Student> students = new ArrayList<>();
@@ -57,6 +62,7 @@ public class StudentService {
         }
         return students;
     }
+
 
     public Student getStudentById(int id) throws SQLException {
         String query = "SELECT * FROM student WHERE id = ?";
