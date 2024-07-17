@@ -1,0 +1,8 @@
+# Gérer les fins de ligne automatiquement pour les fichiers texte
+* text=auto
+
+# Forcer les fins de ligne LF pour les fichiers Java
+*.java text eol=lf
+
+# Forcer les fins de ligne LF pour les fichiers XML
+*.xml text eol=lf
