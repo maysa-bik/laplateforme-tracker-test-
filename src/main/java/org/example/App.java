@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
@@ -22,9 +23,11 @@ public class App {
                 System.out.println("4. Display All Students");
                 System.out.println("5. Search Student by ID");
                 System.out.println("6. Sort Students");
-                System.out.println("7. Exit");
+                System.out.println("7. Advanced Search");
+                System.out.println("8. Display Statistics");
+                System.out.println("9. Display Students with Pagination");
+                System.out.println("10. Exit");
                 int choice = Utils.getIntInput("Enter your choice: ");
-
                 switch (choice) {
                     case 1:
                         String firstName = Utils.getStringInput("Enter first name: ");
@@ -94,6 +97,53 @@ public class App {
                         }
                         break;
                     case 7:
+                        System.out.println("1. Search by Age");
+                        System.out.println("2. Search by Grade");
+                        int searchChoice = Utils.getIntInput("Enter your choice: ");
+                        switch (searchChoice) {
+                            case 1:
+                                int âge = Utils.getIntInput("Enter age: ");
+                                List<Student> studentsByAge = studentService.getStudentsByAge(âge);
+                                for (Student Student : studentsByAge) {
+                                    System.out.println(Student);
+                                }
+                                break;
+                            case 2:
+                                float Grade = Utils.getFloatInput("Enter grade: ");
+                                List<Student> studentsByGrade = studentService.getStudentsByGrade(Grade);
+                                for (Student Student : studentsByGrade) {
+                                    System.out.println(Student);
+                                }
+                                break;
+                            default:
+                                System.out.println("Invalid choice.");
+                        }
+                        break;
+                    case 8:
+                        float avgGrade = studentService.getAverageGrade();
+                        System.out.println("Average grade: " + avgGrade);
+                        // Ajouter d'autres statistiques si nécessaire
+                        break;
+                    case 9:
+                        int pageSize = Utils.getIntInput("Enter page size: ");
+                        int pageNumber = 1;
+                        List<Student> paginatedStudents;
+                        do {
+                            paginatedStudents = studentService.getStudentsWithPagination(pageNumber, pageSize);
+                            for (Student Student : paginatedStudents) {
+                                System.out.println(Student);
+                            }
+                            if (!paginatedStudents.isEmpty()) {
+                                pageNumber++;
+                                System.out.println("\nPress Enter to view next page or type 'exit' to go back.");
+                                String input = new Scanner(System.in).nextLine();
+                                if (input.equalsIgnoreCase("exit")) {
+                                    break;
+                                }
+                            }
+                        } while (!paginatedStudents.isEmpty());
+                        break;
+                    case 10:
                         exit = true;
                         break;
                     default:
@@ -111,4 +161,3 @@ public class App {
         }
     }
 }
-

@@ -9,6 +9,7 @@ public class Utils {
         return Integer.parseInt(scanner.nextLine());
     }
 
+
     public static float getFloatInput(String prompt) {
         System.out.print(prompt);
         return Float.parseFloat(scanner.nextLine());

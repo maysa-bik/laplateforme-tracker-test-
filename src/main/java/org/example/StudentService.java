@@ -4,12 +4,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class StudentService {
     private DatabaseManager dbManager;
 
     public StudentService(DatabaseManager dbManager) {
 
         this.dbManager = dbManager;
+    }
+
+    public StudentService() {
+
     }
 
     public void addStudent(String firstName, String lastName, int age, float grade) throws SQLException {
@@ -82,4 +88,78 @@ public class StudentService {
         }
         return null;
     }
+
+    public List<Student> getStudentsByAge(int age) throws SQLException {
+        String query = "SELECT * FROM student WHERE age = ?";
+        List<Student> students = new ArrayList<>();
+        try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(query)) {
+            stmt.setInt(1, age);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    students.add(new Student(
+                            rs.getInt("id"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getInt("age"),
+                            rs.getFloat("grade")
+                    ));
+                }
+            }
+        }
+        return students;
+    }
+
+    public List<Student> getStudentsByGrade(float grade) throws SQLException {
+        String query = "SELECT * FROM student WHERE grade = ?";
+        List<Student> students = new ArrayList<>();
+        try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(query)) {
+            stmt.setFloat(1, grade);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    students.add(new Student(
+                            rs.getInt("id"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getInt("age"),
+                            rs.getFloat("grade")
+                    ));
+                }
+            }
+        }
+        return students;
+    }
+
+
+    public float getAverageGrade() throws SQLException {
+        String query = "SELECT AVG(grade) AS avg_grade FROM student";
+        try (Statement stmt = dbManager.getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                return rs.getFloat("avg_grade");
+            }
+        }
+        return 0;
+    }
+    public List<Student> getStudentsWithPagination(int pageNumber, int pageSize) throws SQLException {
+        int offset = (pageNumber - 1) * pageSize;
+        String query = "SELECT * FROM student LIMIT ? OFFSET ?";
+        List<Student> students = new ArrayList<>();
+        try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(query)) {
+            stmt.setInt(1, pageSize);
+            stmt.setInt(2, offset);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    students.add(new Student(
+                            rs.getInt("id"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getInt("age"),
+                            rs.getFloat("grade")
+                    ));
+                }
+            }
+        }
+        return students;
+    }
+
 }
